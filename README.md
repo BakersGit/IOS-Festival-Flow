@@ -9,6 +9,8 @@ Bestens geeignet für Gruppen bzw mehrere Personen.
 ## Design
 
 <p>
+<img src="./img/Bildschirmfoto 2024-11-15 um 09.09.53.png" width="200">
+  
 https://github.com/user-attachments/assets/f86ed26e-ead7-4a5a-9a4d-76b6931f241b
 
 </p>
