@@ -21,6 +21,7 @@ https://github.com/user-attachments/assets/f86ed26e-ead7-4a5a-9a4d-76b6931f241b
 
 - [x] Planungs und Detailansicht von Listen
 - [x] Event LiveTracker
+- [x] Event Notifications
 - [x] Vernetzung von Gruppenlisten
 - [x] Equipment-Vorschläge nach Wetter und Lage
 - [x] Camping-Guides (vorallem für Anfänger)
