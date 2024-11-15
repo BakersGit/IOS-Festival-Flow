@@ -18,9 +18,6 @@ https://github.com/user-attachments/assets/f86ed26e-ead7-4a5a-9a4d-76b6931f241b
 
 
 ## Features
-Hier kommen alle Features rein, welche deine App bietet.
-
-**Tipp: Du kannst diese Punkte auch am Anfang ausfüllen und mit der Zeit abhaken, sodass am Ende eine vollständige Liste entsteht.**
 
 - [x] Planungs und Detailansicht von Listen
 - [x] Event LiveTracker
