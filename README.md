@@ -5,7 +5,7 @@
 
 FestialFlow ist eine Festival/Event Organisations und Guide-App
 Sie bezieht jeden ein der Freude am Verreisen oder Teilnehmen von mehrtätigen Events hat.
-Bestens geeignet für Gruppen bzw mehrere Personen. 
+Bestens geeignet für Gruppen bzw. mehrere Personen. 
 
 ## Design
 
