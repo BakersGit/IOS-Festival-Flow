@@ -12,9 +12,8 @@ Vermeide es, hier allzusehr in technische Details zu gehen.
 Füge hier am Ende die Screenshots deiner App ein (achte hierbei auf die Guidelines).
 
 <p>
-  <img src="./img/screen1.png" width="200">
-  <img src="./img/screen2.png" width="200">
-  <img src="./img/screen3.png" width="200">
+  ![Uploading Bildschirmfoto 2024-11-15 um 09.09.53.png…]()
+
 </p>
 
 
