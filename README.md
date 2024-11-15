@@ -47,5 +47,6 @@ Soll ausschließlich über Firebase erfolgen.
 
 - [ ] Map-Tracking
 - [ ] Live-Angaben nach Künstlern
+- [ ] Event-Vorschläge 
 - [ ] Detailansichten von Künstlern
 - [ ] ...
