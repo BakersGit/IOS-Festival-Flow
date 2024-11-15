@@ -1,7 +1,7 @@
 # FestivalFlow
 
 
-### “For a inspiring, wonderful and simply fantastic Festival experience”
+### “For a inspiring, wonderful and simply fantastic Festival Experience”
 
 FestialFlow ist eine Festival/Event Organisations und Guide-App
 Sie bezieht jeden ein der Freude am Verreisen oder Teilnehmen von mehrtätigen Events hat.
