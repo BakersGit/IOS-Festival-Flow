@@ -46,6 +46,7 @@ Soll über Firebase erfolgen.
 
 ## Ausblick
 
+- [ ] Gefahren-Warnungen
 - [ ] Map-Tracking
 - [ ] Live-Angaben nach Künstlern
 - [ ] Event-Vorschläge 
