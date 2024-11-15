@@ -12,7 +12,7 @@ Vermeide es, hier allzusehr in technische Details zu gehen.
 Füge hier am Ende die Screenshots deiner App ein (achte hierbei auf die Guidelines).
 
 <p>
-  ![Uploading Bildschirmfoto 2024-11-15 um 09.09.53.png…]()
+![Bildschirmfoto 2024-11-15 um 09 09 53](https://github.com/user-attachments/assets/f86ed26e-ead7-4a5a-9a4d-76b6931f241b)
 
 </p>
 
