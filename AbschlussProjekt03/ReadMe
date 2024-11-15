@@ -1,2 +1,41 @@
 
-Content coming soon!
+# Name der App
+
+FestivalFlow
+
+“For a inspiring, wonderful and simply fantastic Festival experience”
+
+FestialFlow ist eine Festival/Event Organisations und Guide-App
+Sie bezieht jeden ein der freude am Verreisen oder Teilnehmen von mehrtätigen Events hat.
+Bestens geeignet für Gruppen bzw mehrere Personen. 
+
+## Design
+Füge hier am Ende die Screenshots deiner App ein (achte hierbei auf die Guidelines).
+
+Screen Konzept
+
+## Features
+
+- Planungs und Detailansicht von Listen
+- Event LiveTracker
+- Vernetzung von Gruppenlisten
+- Camping-Guides (vorallem für Anfänger)
+
+Architektur:
+Nach dem Prinzipien von MVVM
+
+#### Datenspeicherung
+
+SwiftData + Soll ausschließlich über Firebase erfolgen.
+
+#### API Calls
+- WeatherAPI (AI Weather by Meteosource)
+- Event-Tracker API (Real-Time Events Search)
+- Event-Tracker (ticketmaster)
+- Event-Tracker (GoaBase)
+
+
+## Ausblick
+
+- Map-Tracking
+- Live-Angaben nach Künstler
