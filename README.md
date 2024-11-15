@@ -34,9 +34,11 @@ Architektur:
 Nach dem Prinzipien von MVVM
 
 #### Datenspeicherung
-SwiftData + Soll ausschließlich über Firebase erfolgen.
+
+Soll ausschließlich über Firebase erfolgen.
 
 #### API Calls
+
 - WeatherAPI (AI Weather by Meteosource)
 - Event-Tracker API (Real-Time Events Search)
 - Event-Tracker (ticketmaster)
@@ -45,5 +47,6 @@ SwiftData + Soll ausschließlich über Firebase erfolgen.
 ## Ausblick
 
 - [ ] Map-Tracking
-- [ ] Live-Angaben nach Künstler
+- [ ] Live-Angaben nach Künstlern
+- [ ] Detailansichten von Künstlern
 - [ ] ...
