@@ -29,7 +29,8 @@ https://github.com/user-attachments/assets/f86ed26e-ead7-4a5a-9a4d-76b6931f241b
 
 ## Technischer Aufbau
 
-Architektur:
+#### Architektur
+
 Nach dem Prinzipien von MVVM
 
 #### Datenspeicherung
