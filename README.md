@@ -24,6 +24,7 @@ Hier kommen alle Features rein, welche deine App bietet.
 - [x] Planungs und Detailansicht von Listen
 - [x] Event LiveTracker
 - [x] Vernetzung von Gruppenlisten
+- [x] Equipment-Vorschläge nach Wetter und Lage
 - [x] Camping-Guides (vorallem für Anfänger)
 
 
