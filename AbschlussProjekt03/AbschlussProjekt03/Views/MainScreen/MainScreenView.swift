@@ -11,15 +11,30 @@ struct MainScreenView: View {
     @State private var alert = false
     
     var body: some View {
-        VStack {
-            Image("Image")
-                .resizable()
-                .scaledToFill()
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                .frame(width: 300, height: 300)
-                .padding(.top, 50)
-                .padding(.bottom, 20)
-            Text("Content Coming Soon!")
+        TabView {
+            Tab("Events", systemImage: "calendar.and.person") {
+                List {
+                    
+                }
+                VStack {
+                    Image("Image")
+                        .resizable()
+                        .scaledToFill()
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .frame(width: 300, height: 300)
+                        .padding(.top, 50)
+                        .padding(.bottom, 20)
+                    Text("Content Coming Soon!")
+                }
+                Spacer()
+
+            }
+            Tab("Guide", systemImage: "tent.2") {
+                
+            }
+            Tab("Preperation", systemImage: "list.number.rtl") {
+                
+            }
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
