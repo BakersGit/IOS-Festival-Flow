@@ -1,51 +1,54 @@
-# Name der App
+# FestivalFlow
 
-**Füge hier einen kurzen, knackigen Slogan ein, um deine App zu bewerben.**
 
-Beschreibe hier in ein paar Sätzen, was deine App bietet.
+#### “For a inspiring, wonderful and simply fantastic Festival Experience”
 
-Für wen ist sie geeignet? Welches Problem löst sie? Was macht deine App anders/besser als andere Apps?
-Vermeide es, hier allzusehr in technische Details zu gehen.
-
+FestialFlow ist eine Festival/Event Organisations und Guide-App
+Sie bezieht jeden ein der Freude am Verreisen oder Teilnehmen von mehrtätigen Events hat.
+Bestens geeignet für Gruppen bzw. mehrere Personen. 
 
 ## Design
-Füge hier am Ende die Screenshots deiner App ein (achte hierbei auf die Guidelines).
 
 <p>
-  <img src="./img/screen1.png" width="200">
-  <img src="./img/screen2.png" width="200">
-  <img src="./img/screen3.png" width="200">
+<img src="./img/Bildschirmfoto 2024-11-15 um 09.09.53.png" width="400">
+  
+https://github.com/user-attachments/assets/f86ed26e-ead7-4a5a-9a4d-76b6931f241b
+
 </p>
 
 
 ## Features
-Hier kommen alle Features rein, welche deine App bietet.
 
-**Tipp: Du kannst diese Punkte auch am Anfang ausfüllen und mit der Zeit abhaken, sodass am Ende eine vollständige Liste entsteht.**
-
-- [x] Feature 1
-- [x] Feature 2
-- [ ] ...
+- [x] Erstellen und Editieren von Listen ( Wie z.B. Ausrüstung, Vorbereitung, etc..)
+- [x] Event LiveTracker (Nach Genre und Region)
+- [x] Event Notifications (Benachrichtigungen über anstehendes Event)
+- [x] Vernetzung von Gruppenlisten
+- [x] Equipment-Vorschläge nach Wetter und Lage
+- [x] Camping-Guides (vorallem für Anfänger)
 
 
 ## Technischer Aufbau
 
-#### Projektaufbau
-Eine kurze Beschreibung deiner Ordnerstruktur und Architektur (MVVM, Repositories) um Außenstehenden zu helfen, sich in deinem Projekt zurecht zu finden.
+#### Architektur
+
+Nach dem Prinzipien von MVVM
 
 #### Datenspeicherung
-Welche Daten speicherst du? Wo und wie (Firebase, Core Data)? Erkläre hier auch, warum du den jeweiligen Dienst nutzt (offline-first, Sync usw.).
+
+Soll über Firebase erfolgen.
 
 #### API Calls
-Welche APIs verwendest du?
 
-#### 3rd-Party Frameworks
-Verwendest du Frameworks, die nicht von dir stammen? Bspw. Swift Packages für Firebase, fertige SwiftUI-Views o.Ä.? Gib diese hier an.
-
+- WeatherAPI (AI Weather by Meteosource)
+- Event-Tracker API (Real-Time Events Search)
+- Event-Tracker (ticketmaster)
+- Event-Tracker (GoaBase)
 
 ## Ausblick
-Beschreibe hier, wo die Reise nach deinem Praxisprojekt hin geht. Was möchtest du in Zukunft noch ergänzen?
 
-- [ ] Geplantes Feature 1
-- [ ] Geplantes Feature 2
+- [ ] Gefahren-Warnungen
+- [ ] Map-Tracking
+- [ ] Live-Angaben nach Künstlern
+- [ ] Event-Vorschläge 
+- [ ] Detailansichten von Künstlern
 - [ ] ...
