@@ -1,18 +1,50 @@
-//
-//  PreperationView.swift
-//  AbschlussProjekt03
-//
-//  Created by Kai Becker on 21.11.24.
-//
+
 
 import SwiftUI
 
 struct PreperationView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+    @StateObject private var viewModel = PreperationViewModel()
+    @State private var isAddingNewList = false
 
-#Preview {
-    PreperationView()
+    var body: some View {
+        VStack {
+            HStack {
+                Text("Preparation")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding(.leading)
+                Spacer()
+                Button(action: {
+                    isAddingNewList = true
+                }) {
+                    Image(systemName: "plus")
+                        .font(.title)
+                        .padding()
+                }
+            }
+            .padding(.top)
+            
+            if viewModel.lists.isEmpty {
+                Text("No lists available")
+                    .font(.headline)
+                    .foregroundColor(.gray)
+                    .padding()
+            } else {
+                List(viewModel.lists) { checklist in
+                    NavigationLink(checklist.title){
+                        ChecklistDetailView(checklist: checklist)
+                            .environmentObject(viewModel)
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $isAddingNewList) {
+            AddNewListSheet(
+                isPresented: $isAddingNewList,
+                viewModel: viewModel)
+        }
+        .onAppear {
+            viewModel.fetchChecklists()
+        }
+    }
 }

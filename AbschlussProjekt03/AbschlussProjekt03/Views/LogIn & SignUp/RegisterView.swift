@@ -15,34 +15,35 @@ struct RegisterView: View {
     
     var body: some View {
         VStack {
-            Image("Image 1")
+ /*           Image("Image 1")
                 .resizable()
                 .scaledToFill()
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .frame(width: 300, height: 300)
                 .padding(.top, 10)
                 .padding(.bottom, 20)
-            Text("Register").font(.title).bold()
+  */
+            Text("Register").font(.title).bold().foregroundStyle(.purple)
             Spacer()
             Divider()
             TextField("Username", text: $username)
-                .textFieldStyle(.plain)
+                .textFieldStyle(.roundedBorder)
                 .padding(.horizontal, 20)
             Divider()
             TextField("Email", text: $email)
-                .textFieldStyle(.plain)
+                .textFieldStyle(.roundedBorder)
                 .padding(.horizontal, 20)
             Divider()
             TextField("Confirm Email", text: $emailConfirm)
-                .textFieldStyle(.plain)
+                .textFieldStyle(.roundedBorder)
                 .padding(.horizontal, 20)
             Divider()
             SecureField("Password", text: $password)
-                .textFieldStyle(.plain)
+                .textFieldStyle(.roundedBorder)
                 .padding(.horizontal, 20)
             Divider()
             SecureField("Confirm Password", text: $passwordConfirm)
-                .textFieldStyle(.plain)
+                .textFieldStyle(.roundedBorder)
                 .padding(.horizontal, 20)
             Divider()
             
@@ -54,7 +55,13 @@ struct RegisterView: View {
             .padding(.top, 15)
             .padding(.bottom, 15)
         }
-        .background(LinearGradient(gradient: Gradient(colors: [Color.gray, Color.white, Color.purple.opacity(0.4)]), startPoint: .top, endPoint: .bottom).ignoresSafeArea())
+        .background {
+            Image(.log)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 420, height: 420)
+                .ignoresSafeArea()
+        }
     }
 }
 #Preview {
