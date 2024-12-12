@@ -7,6 +7,8 @@ import FirebaseAuth
 struct AbschlussProjekt03App: App {
     
     @StateObject private var logInViewModel = LogInViewModel()
+    @StateObject private var preperationViewModel = PreperationViewModel()
+
     
     init() {
         FirebaseConfiguration.shared.setLoggerLevel(.min)
@@ -25,5 +27,6 @@ struct AbschlussProjekt03App: App {
             }
         }
         .environmentObject(self.logInViewModel)
+        .environmentObject(self.preperationViewModel)
     }
 }

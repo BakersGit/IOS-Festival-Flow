@@ -14,6 +14,18 @@ struct Checklist: Codable, Identifiable {
 struct Item: Codable, Identifiable, Equatable {
     var id: String?
     var name: String
-    var quantity: Int
+    var quantity: String
+    var isCompleted: Bool = false
+    var category: ItemCategory
 }
+enum ItemCategory: String, Codable, CaseIterable, Identifiable {
+    case hygiene = "Hygiene Items"
+    case clothing = "Clothing"
+    case equipment = "Equipment"
+    case firstAid = "First Aid"
+    case documents = "Documents"
+    case food = "Food"
+    case others = "Others"
 
+    var id: String { self.rawValue }
+}

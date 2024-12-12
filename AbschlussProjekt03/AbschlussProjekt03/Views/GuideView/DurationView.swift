@@ -2,9 +2,10 @@ import SwiftUI
 
 struct DurationView: View {
     @State private var festivalDuration: Int = 1
-    @State private var selectedGenre: String = "Electronic"
-    let genres = ["Electronic", "Rock", "Hip-Hop", "Techno", "Classical"]
-    
+    @State private var showGuideResult: Bool = false
+    @EnvironmentObject var preperationViewModel: PreperationViewModel
+    @StateObject private var guideViewModel = GuideViewModel()
+
     var body: some View {
         VStack {
             Spacer()
@@ -26,7 +27,9 @@ struct DurationView: View {
                     .padding(.horizontal, 20)
                 Spacer()
                 Button(action: {
-                    festivalDuration += 1
+                    if festivalDuration < 14 {
+                        festivalDuration += 1
+                    }
                 }) {
                     Image(systemName: "plus.circle")
                         .font(.title)
@@ -34,20 +37,14 @@ struct DurationView: View {
                 }
             }
             .padding()
-            .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.2)))
+            .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.3)))
             .padding(.horizontal)
             
-            Picker("Music Genre", selection: $selectedGenre) {
-                ForEach(genres, id: \.self) { genre in
-                    Text(genre)
-                }
-            }
-            .pickerStyle(WheelPickerStyle())
-            .frame(maxHeight: 150)
-            .padding(.horizontal)
             Spacer()
+            
             Button(action: {
-                print("GuideMe tapped. Days: \(festivalDuration), Genre: \(selectedGenre)")
+               
+                showGuideResult = true
             }) {
                 Text("Guide Me")
                     .font(.headline)
@@ -65,13 +62,15 @@ struct DurationView: View {
                 .resizable()
                 .scaledToFill()
                 .frame(width: 420, height: 450)
-                .ignoresSafeArea()
-                .blur(radius: 3)
+                .blur(radius: 1)
                 .offset(y: -25)
         }
+        .sheet(isPresented: $showGuideResult) {
+            GuideResultView(duration: festivalDuration) { items in
+                let checklistTitle = "Suggestion for \(festivalDuration) Days"
+                preperationViewModel.createChecklist(title: checklistTitle, items: items)
+            }
+            .environmentObject(guideViewModel)
+        }
     }
-}
-
-#Preview {
-    DurationView()
 }

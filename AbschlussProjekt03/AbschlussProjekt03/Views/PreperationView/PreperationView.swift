@@ -6,6 +6,7 @@ struct PreperationView: View {
     @StateObject private var viewModel = PreperationViewModel()
     @State private var isAddingNewList = false
 
+
     var body: some View {
         VStack {
             HStack {
@@ -36,13 +37,19 @@ struct PreperationView: View {
                             .environmentObject(viewModel)
                     }
                 }
+                
             }
         }
         .sheet(isPresented: $isAddingNewList) {
             AddNewListSheet(
                 isPresented: $isAddingNewList,
-                viewModel: viewModel)
+                viewModel: viewModel
+            )
+            .presentationDetents([.fraction(0.75)])
+
         }
+        
+        
         .onAppear {
             viewModel.fetchChecklists()
         }

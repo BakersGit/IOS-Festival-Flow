@@ -21,27 +21,6 @@ class PreperationViewModel: ObservableObject {
             print("Failed to save Checklist: \(error)")
         }
     }
-    /*
-    func fetchChecklists() {
-        guard let userId = FirebaseManager.shared.userId else { return }
-        FirebaseManager.shared.database.collection("checklists")
-            .whereField("userId", isEqualTo: userId)
-            .addSnapshotListener { querySnapshot, error in
-                if let error {
-                    print(error)
-                    return
-                }
-                guard let documents = querySnapshot?.documents else {
-                    print("Failed to load Checklists")
-                    return
-                }
-                self.lists = documents.compactMap {
-                    try? $0.data(as: Checklist.self)
-                }
-            }
-    }
-     */
-    
     
     // Fetch Checklists
     func fetchChecklists() {
@@ -88,7 +67,35 @@ class PreperationViewModel: ObservableObject {
     }
     
     // add Item to Checklist
-    func addItemToChecklist(name: String, quantity: String, checklistId: String) {
+    func addItemToChecklist(name: String, quantity: String, category: ItemCategory, checklistId: String) {
+          guard !name.isEmpty else {
+              print("Invalid input: Name is '\(name)' and Quantity is '\(quantity)'")
+              return
+          }
+          guard let checklistIndex = lists.firstIndex(where: { $0.id == checklistId }) else {
+              print("Checklist not found in local data. Checklist ID: \(checklistId)")
+              print("Available checklists: \(lists.map { $0.id ?? "nil" })")
+              return
+          }
+          let newItem = Item(id: UUID().uuidString, name: name, quantity: quantity, category: category)
+          lists[checklistIndex].items.append(newItem)
+          let updatedChecklist = lists[checklistIndex]
+          do {
+              try FirebaseManager.shared.database.collection("checklists")
+                  .document(checklistId)
+                  .setData(from: updatedChecklist) { error in
+                      if let error = error {
+                          print("Failed to add item to Firestore: \(error)")
+                      } else {
+                          print("Item successfully added to Firestore")
+                      }
+                  }
+          } catch {
+              print("Failed to update checklist in Firestore: \(error)")
+          }
+      }
+    /*
+    func addItemToChecklist(name: String, quantity: String, category: ItemCategory, checklistId: String) {
         guard let quantityInt = Int(quantity), !name.isEmpty else {
             print("Invalid input: Name is '\(name)' and Quantity is '\(quantity)'")
             return
@@ -98,7 +105,7 @@ class PreperationViewModel: ObservableObject {
             print("Available checklists: \(lists.map { $0.id ?? "nil" })")
             return
         }
-        let newItem = Item(id: UUID().uuidString, name: name, quantity: quantityInt)
+        let newItem = Item(id: UUID().uuidString, name: name, quantity: quantityInt, category: category)
         lists[checklistIndex].items.append(newItem)
         let updatedChecklist = lists[checklistIndex]
         do {
@@ -115,6 +122,7 @@ class PreperationViewModel: ObservableObject {
             print("Failed to update checklist in Firestore: \(error)")
         }
     }
+     */
 
     // Delete Checklist
     func deleteChecklist(withId id: String?) {
@@ -130,9 +138,15 @@ class PreperationViewModel: ObservableObject {
     }
     
    // Add Item
-    func addItem(name: String, quantity: String) {
+ /*   func addItem(name: String, quantity: String, category: ItemCategory) {
         guard let quantityInt = Int(quantity), !name.isEmpty else { return }
-        let newItem = Item(id: UUID().uuidString, name: name, quantity: quantityInt)
+        let newItem = Item(id: UUID().uuidString, name: name, quantity: quantityInt, category: category)
+        self.currentItems.append(newItem)
+    }
+  */
+    func addItem(name: String, quantity: String, category: ItemCategory) {
+        guard !name.isEmpty else { return }
+        let newItem = Item(id: UUID().uuidString, name: name, quantity: quantity, category: category)
         self.currentItems.append(newItem)
     }
     
@@ -140,7 +154,7 @@ class PreperationViewModel: ObservableObject {
     func deleteAddItem(at offsets: IndexSet) {
         self.currentItems.remove(atOffsets: offsets)
     }
-     
+    
    // Delete Item
     func deleteItem(_ item: Item, from checklistId: String) {
         guard let checklistIndex = lists.firstIndex(where: { $0.id == checklistId }),
@@ -169,5 +183,43 @@ class PreperationViewModel: ObservableObject {
             print("Failed to update checklist in Firestore: \(error)")
         }
     }
+    // Change Status
+    func toggleCompletion(for item: Item, checklistId: String?) {
+        guard let checklistIndex = lists.firstIndex(where: { $0.id == checklistId }),
+              let itemId = item.id,
+              let itemIndex = lists[checklistIndex].items.firstIndex(where: { $0.id == itemId }) else {
+            print("Checklist or Item not found")
+            return
+        }
+        
+        lists[checklistIndex].items[itemIndex].isCompleted.toggle()
+        
+        let updatedChecklist = lists[checklistIndex]
+        do {
+            try FirebaseManager.shared.database.collection("checklists")
+                .document(checklistId ?? "")
+                .setData(from: updatedChecklist) { error in
+                    if let error = error {
+                        print("Failed to update checklist in Firestore: \(error)")
+                    } else {
+                        print("Item completion status updated in Firestore")
+                    }
+                }
+        } catch {
+            print("Failed to update checklist in Firestore: \(error)")
+        }
+    }
+    // Category Emotes
+    func emote(for category: ItemCategory) -> String {
+           switch category {
+           case .hygiene: return "🪥"
+           case .clothing: return "👕"
+           case .equipment: return "🏕️"
+           case .firstAid: return "⛑️"
+           case .documents: return "🪪"
+           case .food: return "🍽️"
+           case .others: return "💠"
+           }
+       }
 }
 

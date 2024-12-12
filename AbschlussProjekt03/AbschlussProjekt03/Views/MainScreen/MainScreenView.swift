@@ -7,6 +7,7 @@ import FirebaseFirestore
 struct MainScreenView: View {
     @StateObject private var eventsViewModel = MainViewModel()
     @EnvironmentObject var logInViewModel: LogInViewModel
+    @EnvironmentObject var preperationViewModel: PreperationViewModel
     @State private var showDurationSheet = false
 
     init() {
@@ -23,12 +24,16 @@ struct MainScreenView: View {
     var body: some View {
         TabView {
             Tab("Events", systemImage: "calendar.and.person") {
-                VStack(spacing: 20) {
+                VStack(alignment: .leading) {
+                    Text("Event-Tracker")
+                        .foregroundStyle(.purple)
+                        .font(.title)
+                        .padding(.horizontal, 30)
                     HStack {
                         TextField("Search Events...", text: $eventsViewModel.searchQuery)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding(.horizontal, 10)
-                        
+
                         Button(action: {
                             eventsViewModel.fetchEvents()
                         }) {
@@ -40,7 +45,8 @@ struct MainScreenView: View {
                         }
                     }
                     .padding(.horizontal, 20)
-                    .padding(.bottom, 35)
+                    .padding(.top, 10)
+
                     if eventsViewModel.isLoading {
                         ProgressView("Loading Events...")
                             .padding()
@@ -49,12 +55,16 @@ struct MainScreenView: View {
                             .foregroundColor(.red)
                             .padding()
                     } else {
-                        EventScrollView(viewModel: eventsViewModel)
-                            .padding(.top, 15)
+                        ScrollView {
+                            VStack(spacing: 10) {
+                                ForEach(eventsViewModel.events, id: \.id) { event in
+                                    EventCardView(event: event, viewModel: eventsViewModel)
+                                }
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.top, 10)
+                        }
                     }
-                    
-                    FavoriteListView(viewModel: eventsViewModel)
-                        .padding(.top, 50)
                 }
                 .background {
                     Image(.main)
@@ -65,12 +75,11 @@ struct MainScreenView: View {
                         .blur(radius: 3)
                         .offset(y: -25)
                 }
-                .padding(.top, 50)
-                .navigationTitle("Events")
                 .onAppear {
                     eventsViewModel.fetchEvents()
                 }
             }
+
             Tab("Guide", systemImage: "tent.2") {
                 ZStack {
                     Image(.guide)
@@ -84,16 +93,15 @@ struct MainScreenView: View {
                 }
                 .sheet(isPresented: $showDurationSheet) {
                     DurationView()
+                        .environmentObject(preperationViewModel)
+                        .presentationDetents([.fraction(0.5)])
                 }
             }
+
             Tab("Preparation", systemImage: "list.number.rtl") {
                 PreperationView()
             }
-            /*
-            Tab("Journey", systemImage: "map") {
-                JourneyView()
-            }
-             */
+
             Tab("Profile", systemImage: "person.crop.circle") {
                 SettingsView()
             }
@@ -104,4 +112,5 @@ struct MainScreenView: View {
 #Preview {
     MainScreenView()
         .environmentObject(LogInViewModel())
+        .environmentObject(PreperationViewModel())
 }

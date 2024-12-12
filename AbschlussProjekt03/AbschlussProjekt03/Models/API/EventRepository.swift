@@ -26,7 +26,6 @@ class EventRepository {
 
 
 
-
  /*
      func getEventsFromAPI() async throws -> [Event] {
         let urlString = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=YDdWVD3tLoEwqXLhfVxU71agyjaUjkd7&keyword=Electronic&size=20&page=0&countryCode=DE"
