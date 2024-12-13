@@ -66,18 +66,17 @@ class MainViewModel: ObservableObject {
     }
     
     private func loadUserFavorites() async {
-        guard let userId = auth.currentUser?.uid else {
-            print("User not logged in")
-            return
-        }
-        do {
-            let document = try await firestore.collection("users").document(userId).getDocument()
-            let user = try document.data(as: FirestoreUser.self)
-            let favoriteEventIds = user.favoriteEvents
-            
-            favoriteEvents = events.filter { favoriteEventIds.contains($0.id) }
-        } catch {
-            print("Failed to fetch user favorites: \(error)")
-        }
-    }
+           guard let userId = auth.currentUser?.uid else {
+               errorMessage = "User not logged in. Please sign in."
+               return
+           }
+           do {
+               let document = try await firestore.collection("users").document(userId).getDocument()
+               let user = try document.data(as: FirestoreUser.self)
+               let favoriteEventIds = user.favoriteEvents
+               favoriteEvents = events.filter { favoriteEventIds.contains($0.id) }
+           } catch {
+               errorMessage = "Failed to load favorite events. Please try again."
+           }
+       }
 }

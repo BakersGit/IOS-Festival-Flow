@@ -5,10 +5,17 @@ import SwiftUI
 struct PreperationView: View {
     @StateObject private var viewModel = PreperationViewModel()
     @State private var isAddingNewList = false
-
-
+    
+    
     var body: some View {
         VStack {
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
+                    .padding()
+            }
+            
             HStack {
                 Text("Preparation")
                     .font(.largeTitle)
@@ -46,7 +53,7 @@ struct PreperationView: View {
                 viewModel: viewModel
             )
             .presentationDetents([.fraction(0.75)])
-
+            
         }
         
         
