@@ -48,7 +48,7 @@ Firestore + Swift Data
 - [ ] Gefahren-Warnungen
 - [ ] Map-Tracking
 - [ ] Event-Start Notifications
-- [ ] Event-Vorschläge nach Präferenzen des Users
+- [ ] Event-Vorschläge nach Präferenzen/Favorisierung des Users
 - [ ] Vernetzung/Sharing von Listen mit anderen Usern
 - [ ] Noch dynamischere Listenvorschläge basierend auf Wetterprognosen
 - [ ] Camping-Tipps für Anfänger
