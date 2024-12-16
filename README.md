@@ -1,11 +1,11 @@
-# FestivalFlow
+# Festival Flow
 
 
 #### “For a inspiring, wonderful and simply fantastic Festival Experience”
 
 FestialFlow ist eine Festival/Event Organisations und Guide-App
 Sie bezieht jeden ein der Freude am Verreisen oder Teilnehmen von mehrtätigen Events hat.
-Bestens geeignet für Gruppen bzw. mehrere Personen. 
+
 
 ## Design
 
@@ -19,12 +19,11 @@ https://github.com/user-attachments/assets/f86ed26e-ead7-4a5a-9a4d-76b6931f241b
 
 ## Features
 
-- [x] Erstellen und Editieren von Listen ( Wie z.B. Ausrüstung, Vorbereitung, etc..)
-- [x] Event LiveTracker (Nach Genre und Region)
-- [x] Event Notifications (Benachrichtigungen über anstehendes Event)
-- [x] Vernetzung von Gruppenlisten
-- [x] Equipment-Vorschläge nach Wetter und Lage
-- [x] Camping-Guides (vorallem für Anfänger)
+- [x] Event LiveTracker (Ticketmaster + GoaBase)
+- [x] Erstellen von Listen ( Wie z.B. Ausrüstung, Dokumente, etc..)
+- [x] Editieren von Listen oder Vorschlägen
+- [x] Eventdetails wie Tickerverkauf, Location und mehr
+- [x] Dynamische Vorschläge für Vorbereitung/Listen
 
 
 ## Technischer Aufbau
@@ -35,20 +34,22 @@ Nach dem Prinzipien von MVVM
 
 #### Datenspeicherung
 
-Soll über Firebase erfolgen.
+Firestore + Swift Data
 
 #### API Calls
 
-- WeatherAPI (AI Weather by Meteosource)
-- Event-Tracker API (Real-Time Events Search)
 - Event-Tracker (ticketmaster)
 - Event-Tracker (GoaBase)
+- Weather API (Ai Weather by Meteosource, als Ausblick für späteres Extra-Feature)
+
 
 ## Ausblick
 
 - [ ] Gefahren-Warnungen
 - [ ] Map-Tracking
-- [ ] Live-Angaben nach Künstlern
-- [ ] Event-Vorschläge 
-- [ ] Detailansichten von Künstlern
+- [ ] Event-Start Notifications
+- [ ] Event-Vorschläge nach Präferenzen des Users
+- [ ] Vernetzung/Sharing von Listen mit anderen Usern
+- [ ] Noch dynamischere Listenvorschläge basierend auf Wetterprognosen
+- [ ] Camping-Tipps für Anfänger
 - [ ] ...
