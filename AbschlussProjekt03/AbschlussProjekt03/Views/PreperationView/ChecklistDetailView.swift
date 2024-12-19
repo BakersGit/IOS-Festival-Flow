@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct ChecklistDetailView: View {
@@ -12,14 +11,53 @@ struct ChecklistDetailView: View {
     @State private var showAddItemSheet: Bool = false
     @State private var showDeleteAlert: Bool = false
     
-    
     var groupedItems: [ItemCategory: [Item]] {
         Dictionary(grouping: checklist.items, by: { $0.category })
             .filter { !$0.value.isEmpty }
     }
     
+    var completionPercentage: Double {
+        let totalItems = checklist.items.count
+        let completedItems = checklist.items.filter { $0.isCompleted }.count
+        guard totalItems > 0 else { return 0 }
+        return Double(completedItems) / Double(totalItems)
+    }
+    
     var body: some View {
         VStack {
+            VStack {
+                ZStack {
+                    Circle()
+                        .stroke(lineWidth: 20)
+                        .opacity(0.3)
+                        .foregroundColor(.gray)
+                    
+                    Circle()
+                        .trim(from: 0, to: completionPercentage)
+                        .stroke(
+                            AngularGradient(
+                                gradient: Gradient(colors: [.red, .brown, .blue, .purple]),
+                                center: .center
+                            ),
+                            style: StrokeStyle(lineWidth: 20, lineCap: .round)
+                        )
+                        .rotationEffect(.degrees(-90))
+                        .animation(.easeInOut, value: completionPercentage)
+                    
+                    VStack {
+                        Text("\(Int(completionPercentage * 100))%")
+                            .font(.largeTitle)
+                            .bold()
+                        Text("Complete")
+                            .font(.caption)
+                            .foregroundColor(completionPercentage == 1.0 ? .green : .secondary) 
+                    }
+                }
+                .frame(width: 150, height: 150)
+                .padding(.bottom, 20)
+            }
+            .padding(.top, 15)
+            
             HStack {
                 Button(action: {
                     showDeleteAlert = true
@@ -27,6 +65,11 @@ struct ChecklistDetailView: View {
                     Text("Delete List")
                         .foregroundColor(.red)
                         .bold()
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.black.opacity(0.6))
+                                .frame(width: 95, height: 45)
+                        )
                 }
                 .alert(isPresented: $showDeleteAlert) {
                     Alert(
@@ -43,9 +86,20 @@ struct ChecklistDetailView: View {
                 Button(action: {
                     showAddItemSheet = true
                 }) {
-                    Image(systemName: "plus")
+                    Image(systemName: "plus.circle")
                         .font(.title)
-                        .padding()
+                        .foregroundStyle(LinearGradient(
+                            colors: [.green, .blue],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ))
+                        .frame(width: 40, height: 40)
+                        .padding(8)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.black.opacity(0.6))
+                                .frame(width: 45, height: 45)
+                        )
                 }
             }
             .padding(.horizontal)
@@ -90,6 +144,7 @@ struct ChecklistDetailView: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
         }
         .sheet(isPresented: $showAddItemSheet) {
             AddItemSheet(
@@ -100,5 +155,11 @@ struct ChecklistDetailView: View {
             .presentationDetents([.fraction(0.5)])
         }
         .navigationTitle(checklist.title)
+        .background(
+            Image("LogIn1")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+        )
     }
 }

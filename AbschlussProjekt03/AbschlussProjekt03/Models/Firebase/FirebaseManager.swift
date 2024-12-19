@@ -42,7 +42,7 @@ class FirebaseManager {
                 let user = try document.data(as: FirestoreUser.self)
                 self.user = user
             } catch {
-                print("Dokument ist kein User")
+                print("Document is no user")
             }
         }
     }

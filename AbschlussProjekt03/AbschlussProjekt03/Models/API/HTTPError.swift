@@ -7,8 +7,14 @@ enum HTTPError: Error {
     
     var message: String {
         switch self {
-        case .invalidURL: return "Invalid URL"
-        case .decodingError: return "Error decoding data"
+        case .invalidURL:
+            return "Invalid URL"
+        case .decodingError:
+            return """
+            Error loading Data
+            Please try to enter Valid Event Name/Data and try again.
+            For example: Try searching for 'Rock', 'Electronic', 'Techno' and so on..
+            """
         }
     }
 }

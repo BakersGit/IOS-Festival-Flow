@@ -33,43 +33,51 @@ struct AddItemSheet: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
             
             HStack {
                 Button(action: {
                     showSheet = false
                 }) {
                     Text("Cancel")
-                        .frame(maxWidth: 100)
-                        .padding(10)
-                        .background(Color.red)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: 180)
+                        .padding(.vertical, 12)
+                        .background(.red.gradient, in: Capsule())
                 }
-                
+
                 Button(action: {
-                                    if let checklistId = checklistId, !newItemName.isEmpty, !newItemQuantity.isEmpty {
-                                        viewModel.addItemToChecklist(
-                                            name: newItemName,
-                                            quantity: newItemQuantity, 
-                                            category: selectedCategory,
-                                            checklistId: checklistId
-                                        )
-                                        showSheet = false
+                    if let checklistId = checklistId, !newItemName.isEmpty, !newItemQuantity.isEmpty {
+                        viewModel.addItemToChecklist(
+                            name: newItemName,
+                            quantity: newItemQuantity,
+                            category: selectedCategory,
+                            checklistId: checklistId
+                        )
+                        showSheet = false
                     }
                 }) {
                     Text("Save")
-                        .frame(maxWidth: 100)
-                        .padding(10)
-                        .background(Color.purple)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: 180) 
+                        .padding(.vertical, 12)
+                        .background(.purple.gradient, in: Capsule())
                 }
                 .disabled(newItemName.isEmpty || newItemQuantity.isEmpty)
             }
             .padding(.horizontal)
             .padding(.bottom, 20)
         }
-        .background(Color(UIColor.systemBackground))
+        .background(
+            Image("Duration2")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+        )
         .cornerRadius(20)
         .shadow(radius: 10)
     }

@@ -8,7 +8,7 @@ struct Checklist: Codable, Identifiable {
     var userId: String
     var title: String
     var items: [Item]
-    
+    var sharedWith: [String] = []    
 }
 
 struct Item: Codable, Identifiable, Equatable {

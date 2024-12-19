@@ -1,4 +1,5 @@
 import SwiftUI
+
 struct GuideResultView: View {
     let duration: Int
     let onAddToPreparation: ([Item]) -> Void
@@ -23,7 +24,7 @@ struct GuideResultView: View {
                     .padding()
             } else {
                 List {
-                    ForEach(ItemCategory.allCases, id: \ .self) { category in
+                    ForEach(ItemCategory.allCases, id: \.self) { category in
                         Section(header: Text("\(viewModel.emote(for: category)) \(category.rawValue)")) {
                             ForEach(suggestedItems.filter { $0.category == category }) { item in
                                 HStack {
@@ -36,7 +37,8 @@ struct GuideResultView: View {
                         }
                     }
                 }
-
+                .scrollContentBackground(.hidden)
+                
                 VStack(spacing: 10) {
                     Button(action: {
                         onAddToPreparation(suggestedItems)
@@ -44,11 +46,11 @@ struct GuideResultView: View {
                     }) {
                         Text("Add to Preparation")
                             .font(.headline)
-                            .frame(maxWidth: .infinity, minHeight: 50)
-                            .background(Color.purple)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .padding(.horizontal)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: 180)
+                            .padding(.vertical, 12)
+                            .background(.purple.gradient, in: Capsule())
                     }
 
                     Button(action: {
@@ -56,15 +58,21 @@ struct GuideResultView: View {
                     }) {
                         Text("Cancel")
                             .font(.headline)
-                            .frame(maxWidth: .infinity, minHeight: 50)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .padding(.horizontal)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: 180)
+                            .padding(.vertical, 12)
+                            .background(.red.gradient, in: Capsule())
                     }
                 }
                 .padding(.bottom)
             }
         }
+        .background(
+            Image("Duration2")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+        )
     }
 }

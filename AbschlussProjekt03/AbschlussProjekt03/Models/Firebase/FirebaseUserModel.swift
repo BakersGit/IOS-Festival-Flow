@@ -10,7 +10,5 @@ struct FirestoreUser: Codable, Identifiable {
     var username: String
     var email: String
     var password: String
-    var favoriteEvents: [String] = []
-    var checklists: [Checklist] = []
-    
+    var favoriteEvents: [String] = []    
 }

@@ -15,7 +15,12 @@ struct Event: Codable, Identifiable {
     let dates: EventDates
     let url: String
     let images: [EventImage]
-
+    let description: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, name, dates, url, images
+        case description = "desc" 
+    }
 }
 struct EventImage: Codable {
     let url: String
@@ -29,7 +34,9 @@ struct EventStart: Codable {
     let localDate: String
     let localTime: String?
 }
-struct Location: Codable {
+/*
+ struct Location: Codable {
     let latitude: String
     let longitude: String
 }
+*/

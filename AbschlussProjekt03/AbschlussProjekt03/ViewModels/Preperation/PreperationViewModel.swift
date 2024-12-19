@@ -1,4 +1,194 @@
 
+ 
+ import Foundation
+ import Firebase
+ import FirebaseAuth
+ import FirebaseFirestore
+
+ class PreperationViewModel: ObservableObject {
+     
+     @Published var lists: [Checklist] = []
+     @Published var currentItems: [Item] = []
+     @Published var errorMessage: String? = nil
+
+   
+     func createChecklist(title: String, items: [Item]) {
+         guard let userId = FirebaseManager.shared.userId else { return }
+         let checklist = Checklist(id: nil, userId: userId, title: title, items: items)
+         do {
+             try FirebaseManager.shared.database.collection("checklists").addDocument(from: checklist)
+             self.lists.append(checklist)
+             self.currentItems.removeAll()
+         } catch let error {
+             print("Failed to save Checklist: \(error)")
+         }
+     }
+     
+     func fetchChecklists() {
+         guard let userId = FirebaseManager.shared.userId else {
+             print("User ID not found")
+             return
+         }
+         FirebaseManager.shared.database.collection("checklists")
+             .whereField("userId", isEqualTo: userId)
+             .addSnapshotListener { querySnapshot, error in
+                 if let error = error {
+                     print("Failed to fetch checklists: \(error)")
+                     return
+                 }
+                 guard let documents = querySnapshot?.documents else {
+                     print("No documents found for checklists")
+                     return
+                 }
+                 self.lists = documents.compactMap {
+                     do {
+                         let checklist = try $0.data(as: Checklist.self)
+                         print("Fetched checklist: \(checklist)")
+                         return checklist
+                     } catch {
+                         print("Failed to decode checklist: \(error)")
+                         return nil
+                     }
+                 }
+                 print("Final lists: \(self.lists.map { $0.id ?? "nil" })")
+             }
+     }
+
+     func updateChecklist(with id: String?, title: String) {
+         guard let id else { return }
+         let data = ["title": title]
+         FirebaseManager.shared.database.collection("checklists").document(id).updateData(data) { error in
+             if let error {
+                 print("Failed to update Checklist", error)
+                 return
+             }
+             print("Checklist updated!")
+         }
+     }
+     
+     func addItemToChecklist(name: String, quantity: String, category: ItemCategory, checklistId: String) {
+           guard !name.isEmpty else {
+               print("Invalid input: Name is '\(name)' and Quantity is '\(quantity)'")
+               return
+           }
+           guard let checklistIndex = lists.firstIndex(where: { $0.id == checklistId }) else {
+               print("Checklist not found in local data. Checklist ID: \(checklistId)")
+               print("Available checklists: \(lists.map { $0.id ?? "nil" })")
+               return
+           }
+           let newItem = Item(id: UUID().uuidString, name: name, quantity: quantity, category: category)
+           lists[checklistIndex].items.append(newItem)
+           let updatedChecklist = lists[checklistIndex]
+           do {
+               try FirebaseManager.shared.database.collection("checklists")
+                   .document(checklistId)
+                   .setData(from: updatedChecklist) { error in
+                       if let error = error {
+                           print("Failed to add item to Firestore: \(error)")
+                       } else {
+                           print("Item successfully added to Firestore")
+                       }
+                   }
+           } catch {
+               print("Failed to update checklist in Firestore: \(error)")
+           }
+       }
+    
+
+     func deleteChecklist(withId id: String?) {
+         guard let id else { return }
+         
+         FirebaseManager.shared.database.collection("checklists").document(id).delete() { error in
+             if let error {
+                 print("Failed to delete checklist", error)
+                 return
+             }
+             print("Checklist with ID \(id) successfully deleted")
+         }
+     }
+     
+     func addItem(name: String, quantity: String, category: ItemCategory) {
+         guard !name.isEmpty else { return }
+         let newItem = Item(id: UUID().uuidString, name: name, quantity: quantity, category: category)
+         self.currentItems.append(newItem)
+     }
+     
+     func deleteAddItem(at offsets: IndexSet) {
+         self.currentItems.remove(atOffsets: offsets)
+     }
+     
+     func deleteItem(_ item: Item, from checklistId: String) {
+         guard let checklistIndex = lists.firstIndex(where: { $0.id == checklistId }),
+               let itemId = item.id else {
+             print("Checklist or Item not found")
+             return
+         }
+         if let itemIndex = lists[checklistIndex].items.firstIndex(where: { $0.id == itemId }) {
+             lists[checklistIndex].items.remove(at: itemIndex)
+         } else {
+             print("Item not found in checklist")
+             return
+         }
+         let updatedChecklist = lists[checklistIndex]
+         do {
+             try FirebaseManager.shared.database.collection("checklists")
+                 .document(checklistId)
+                 .setData(from: updatedChecklist) { error in
+                     if let error = error {
+                         print("Failed to update checklist in Firestore: \(error)")
+                     } else {
+                         print("Item successfully deleted from Firestore")
+                     }
+                 }
+         } catch {
+             print("Failed to update checklist in Firestore: \(error)")
+         }
+     }
+     
+     func toggleCompletion(for item: Item, checklistId: String?) {
+         guard let checklistIndex = lists.firstIndex(where: { $0.id == checklistId }),
+               let itemId = item.id,
+               let itemIndex = lists[checklistIndex].items.firstIndex(where: { $0.id == itemId }) else {
+             print("Checklist or Item not found")
+             return
+         }
+         
+         lists[checklistIndex].items[itemIndex].isCompleted.toggle()
+         
+         let updatedChecklist = lists[checklistIndex]
+         do {
+             try FirebaseManager.shared.database.collection("checklists")
+                 .document(checklistId ?? "")
+                 .setData(from: updatedChecklist) { error in
+                     if let error = error {
+                         print("Failed to update checklist in Firestore: \(error)")
+                     } else {
+                         print("Item completion status updated in Firestore")
+                     }
+                 }
+         } catch {
+             print("Failed to update checklist in Firestore: \(error)")
+         }
+     }
+     
+     func emote(for category: ItemCategory) -> String {
+            switch category {
+            case .hygiene: return "🪥"
+            case .clothing: return "👕"
+            case .equipment: return "🏕️"
+            case .firstAid: return "⛑️"
+            case .documents: return "🪪"
+            case .food: return "🍽️"
+            case .others: return "💠"
+            }
+        }
+ }
+
+
+/*
+ 
+ // BackUp
+ 
 import Foundation
 import Firebase
 import FirebaseAuth
@@ -97,36 +287,7 @@ class PreperationViewModel: ObservableObject {
                errorMessage = "Failed to update checklist."
            }
        }
-    /*
-    func addItemToChecklist(name: String, quantity: String, category: ItemCategory, checklistId: String) {
-        guard let quantityInt = Int(quantity), !name.isEmpty else {
-            print("Invalid input: Name is '\(name)' and Quantity is '\(quantity)'")
-            return
-        }
-        guard let checklistIndex = lists.firstIndex(where: { $0.id == checklistId }) else {
-            print("Checklist not found in local data. Checklist ID: \(checklistId)")
-            print("Available checklists: \(lists.map { $0.id ?? "nil" })")
-            return
-        }
-        let newItem = Item(id: UUID().uuidString, name: name, quantity: quantityInt, category: category)
-        lists[checklistIndex].items.append(newItem)
-        let updatedChecklist = lists[checklistIndex]
-        do {
-            try FirebaseManager.shared.database.collection("checklists")
-                .document(checklistId)
-                .setData(from: updatedChecklist) { error in
-                    if let error = error {
-                        print("Failed to add item to Firestore: \(error)")
-                    } else {
-                        print("Item successfully added to Firestore")
-                    }
-                }
-        } catch {
-            print("Failed to update checklist in Firestore: \(error)")
-        }
-    }
-     */
-
+ 
     // Delete Checklist
     func deleteChecklist(withId id: String?) {
             guard let id else {
@@ -142,13 +303,6 @@ class PreperationViewModel: ObservableObject {
             }
         }
     
-   // Add Item
- /*   func addItem(name: String, quantity: String, category: ItemCategory) {
-        guard let quantityInt = Int(quantity), !name.isEmpty else { return }
-        let newItem = Item(id: UUID().uuidString, name: name, quantity: quantityInt, category: category)
-        self.currentItems.append(newItem)
-    }
-  */
     func addItem(name: String, quantity: String, category: ItemCategory) {
         guard !name.isEmpty else { return }
         let newItem = Item(id: UUID().uuidString, name: name, quantity: quantity, category: category)
@@ -230,235 +384,79 @@ class PreperationViewModel: ObservableObject {
            case .others: return "💠"
            }
        }
-}
-
-/*
- 
- import Foundation
- import Firebase
- import FirebaseAuth
- import FirebaseFirestore
-
- class PreperationViewModel: ObservableObject {
-     
-     @Published var lists: [Checklist] = []
-     @Published var currentItems: [Item] = []
-     @Published var errorMessage: String? = nil
-
-   
-     // create Checklist
-     func createChecklist(title: String, items: [Item]) {
-         guard let userId = FirebaseManager.shared.userId else { return }
-         let checklist = Checklist(id: nil, userId: userId, title: title, items: items)
-         do {
-             try FirebaseManager.shared.database.collection("checklists").addDocument(from: checklist)
-             self.lists.append(checklist)
-             self.currentItems.removeAll()
-         } catch let error {
-             print("Failed to save Checklist: \(error)")
-         }
-     }
-     
-     // Fetch Checklists
-     func fetchChecklists() {
-         guard let userId = FirebaseManager.shared.userId else {
-             print("User ID not found")
-             return
-         }
-         FirebaseManager.shared.database.collection("checklists")
-             .whereField("userId", isEqualTo: userId)
-             .addSnapshotListener { querySnapshot, error in
-                 if let error = error {
-                     print("Failed to fetch checklists: \(error)")
-                     return
-                 }
-                 guard let documents = querySnapshot?.documents else {
-                     print("No documents found for checklists")
-                     return
-                 }
-                 self.lists = documents.compactMap {
-                     do {
-                         let checklist = try $0.data(as: Checklist.self)
-                         print("Fetched checklist: \(checklist)")
-                         return checklist
-                     } catch {
-                         print("Failed to decode checklist: \(error)")
-                         return nil
-                     }
-                 }
-                 print("Final lists: \(self.lists.map { $0.id ?? "nil" })")
-             }
-     }
-
-     // update
-     func updateChecklist(with id: String?, title: String) {
-         guard let id else { return }
-         let data = ["title": title]
-         FirebaseManager.shared.database.collection("checklists").document(id).updateData(data) { error in
-             if let error {
-                 print("Failed to update Checklist", error)
-                 return
-             }
-             print("Checklist updated!")
-         }
-     }
-     
-     // add Item to Checklist
-     func addItemToChecklist(name: String, quantity: String, category: ItemCategory, checklistId: String) {
-           guard !name.isEmpty else {
-               print("Invalid input: Name is '\(name)' and Quantity is '\(quantity)'")
-               return
-           }
-           guard let checklistIndex = lists.firstIndex(where: { $0.id == checklistId }) else {
-               print("Checklist not found in local data. Checklist ID: \(checklistId)")
-               print("Available checklists: \(lists.map { $0.id ?? "nil" })")
-               return
-           }
-           let newItem = Item(id: UUID().uuidString, name: name, quantity: quantity, category: category)
-           lists[checklistIndex].items.append(newItem)
-           let updatedChecklist = lists[checklistIndex]
-           do {
-               try FirebaseManager.shared.database.collection("checklists")
-                   .document(checklistId)
-                   .setData(from: updatedChecklist) { error in
-                       if let error = error {
-                           print("Failed to add item to Firestore: \(error)")
-                       } else {
-                           print("Item successfully added to Firestore")
-                       }
-                   }
-           } catch {
-               print("Failed to update checklist in Firestore: \(error)")
-           }
-       }
-     /*
-     func addItemToChecklist(name: String, quantity: String, category: ItemCategory, checklistId: String) {
-         guard let quantityInt = Int(quantity), !name.isEmpty else {
-             print("Invalid input: Name is '\(name)' and Quantity is '\(quantity)'")
-             return
-         }
-         guard let checklistIndex = lists.firstIndex(where: { $0.id == checklistId }) else {
-             print("Checklist not found in local data. Checklist ID: \(checklistId)")
-             print("Available checklists: \(lists.map { $0.id ?? "nil" })")
-             return
-         }
-         let newItem = Item(id: UUID().uuidString, name: name, quantity: quantityInt, category: category)
-         lists[checklistIndex].items.append(newItem)
-         let updatedChecklist = lists[checklistIndex]
-         do {
-             try FirebaseManager.shared.database.collection("checklists")
-                 .document(checklistId)
-                 .setData(from: updatedChecklist) { error in
-                     if let error = error {
-                         print("Failed to add item to Firestore: \(error)")
-                     } else {
-                         print("Item successfully added to Firestore")
-                     }
-                 }
-         } catch {
-             print("Failed to update checklist in Firestore: \(error)")
-         }
-     }
-      */
-
-     // Delete Checklist
-     func deleteChecklist(withId id: String?) {
-         guard let id else { return }
-         
-         FirebaseManager.shared.database.collection("checklists").document(id).delete() { error in
-             if let error {
-                 print("Failed to delete checklist", error)
-                 return
-             }
-             print("Checklist with ID \(id) successfully deleted")
-         }
-     }
-     
-    // Add Item
-  /*   func addItem(name: String, quantity: String, category: ItemCategory) {
-         guard let quantityInt = Int(quantity), !name.isEmpty else { return }
-         let newItem = Item(id: UUID().uuidString, name: name, quantity: quantityInt, category: category)
-         self.currentItems.append(newItem)
-     }
-   */
-     func addItem(name: String, quantity: String, category: ItemCategory) {
-         guard !name.isEmpty else { return }
-         let newItem = Item(id: UUID().uuidString, name: name, quantity: quantity, category: category)
-         self.currentItems.append(newItem)
-     }
-     
-   // Delete Add Item
-     func deleteAddItem(at offsets: IndexSet) {
-         self.currentItems.remove(atOffsets: offsets)
-     }
-     
-    // Delete Item
-     func deleteItem(_ item: Item, from checklistId: String) {
-         guard let checklistIndex = lists.firstIndex(where: { $0.id == checklistId }),
-               let itemId = item.id else {
-             print("Checklist or Item not found")
-             return
-         }
-         if let itemIndex = lists[checklistIndex].items.firstIndex(where: { $0.id == itemId }) {
-             lists[checklistIndex].items.remove(at: itemIndex)
-         } else {
-             print("Item not found in checklist")
-             return
-         }
-         let updatedChecklist = lists[checklistIndex]
-         do {
-             try FirebaseManager.shared.database.collection("checklists")
-                 .document(checklistId)
-                 .setData(from: updatedChecklist) { error in
-                     if let error = error {
-                         print("Failed to update checklist in Firestore: \(error)")
-                     } else {
-                         print("Item successfully deleted from Firestore")
-                     }
-                 }
-         } catch {
-             print("Failed to update checklist in Firestore: \(error)")
-         }
-     }
-     // Change Status
-     func toggleCompletion(for item: Item, checklistId: String?) {
-         guard let checklistIndex = lists.firstIndex(where: { $0.id == checklistId }),
-               let itemId = item.id,
-               let itemIndex = lists[checklistIndex].items.firstIndex(where: { $0.id == itemId }) else {
-             print("Checklist or Item not found")
-             return
-         }
-         
-         lists[checklistIndex].items[itemIndex].isCompleted.toggle()
-         
-         let updatedChecklist = lists[checklistIndex]
-         do {
-             try FirebaseManager.shared.database.collection("checklists")
-                 .document(checklistId ?? "")
-                 .setData(from: updatedChecklist) { error in
-                     if let error = error {
-                         print("Failed to update checklist in Firestore: \(error)")
-                     } else {
-                         print("Item completion status updated in Firestore")
-                     }
-                 }
-         } catch {
-             print("Failed to update checklist in Firestore: \(error)")
-         }
-     }
-     // Category Emotes
-     func emote(for category: ItemCategory) -> String {
-            switch category {
-            case .hygiene: return "🪥"
-            case .clothing: return "👕"
-            case .equipment: return "🏕️"
-            case .firstAid: return "⛑️"
-            case .documents: return "🪪"
-            case .food: return "🍽️"
-            case .others: return "💠"
+    func shareChecklist(withEmail email: String, checklistId: String) {
+        // Schritt 1: Nach User-ID für die angegebene E-Mail suchen
+        FirebaseManager.shared.database.collection("users")
+            .whereField("email", isEqualTo: email)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    self.errorMessage = "Failed to find user: \(error.localizedDescription)"
+                    return
+                }
+                
+                guard let document = snapshot?.documents.first,
+                      let user = try? document.data(as: FirestoreUser.self),
+                      let userId = user.id else {
+                    self.errorMessage = "User not found for the provided email."
+                    return
+                }
+                
+                // Schritt 2: User-ID zur Checklist hinzufügen
+                self.addUserToChecklist(userId: userId, checklistId: checklistId)
             }
+    }
+
+    private func addUserToChecklist(userId: String, checklistId: String) {
+        guard let checklistIndex = lists.firstIndex(where: { $0.id == checklistId }) else {
+            self.errorMessage = "Checklist not found."
+            return
         }
- }
+        
+        var checklist = lists[checklistIndex]
+        if checklist.sharedWith.contains(userId) {
+            self.errorMessage = "This user already has access to the checklist."
+            return
+        }
+        
+        checklist.sharedWith.append(userId)
+        
+        do {
+            try FirebaseManager.shared.database.collection("checklists")
+                .document(checklistId)
+                .setData(from: checklist) { error in
+                    if let error {
+                        self.errorMessage = "Failed to share checklist: \(error.localizedDescription)"
+                    } else {
+                        self.errorMessage = nil
+                    }
+                }
+        } catch {
+            self.errorMessage = "Failed to update checklist: \(error.localizedDescription)"
+        }
+    }
+    func fetchSharedChecklists() {
+        guard let userId = FirebaseManager.shared.userId else {
+            errorMessage = "User ID not found. Please sign in."
+            return
+        }
+        
+        FirebaseManager.shared.database.collection("checklists")
+            .whereField("sharedWith", arrayContains: userId)
+            .addSnapshotListener { querySnapshot, error in
+                if let error = error {
+                    self.errorMessage = "Failed to fetch shared checklists: \(error.localizedDescription)"
+                    return
+                }
+                guard let documents = querySnapshot?.documents else {
+                    self.errorMessage = "No shared checklists found."
+                    return
+                }
+                self.lists.append(contentsOf: documents.compactMap {
+                    try? $0.data(as: Checklist.self)
+                })
+            }
+    }
 
 
- */
+}
+*/

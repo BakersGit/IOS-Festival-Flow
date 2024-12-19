@@ -3,17 +3,27 @@ import SwiftData
 
 struct SettingsView: View {
     @AppStorage("darkMode") var darkMode: Bool = false
-    @AppStorage("language") var appLanguage: String = "Deutsch"
-    
+    @AppStorage("language") var appLanguage: String = "English"
     
     @EnvironmentObject var logInViewModel: LogInViewModel
-    var language = ["English", "Deutsch", "Französisch"]
+    var language = ["English", "German", "French", "Spanish"]
     @State private var notifications: Bool = true
     @State private var showAlert: Bool = false
+    @State private var showLanguageAlert: Bool = false
     
     var body: some View {
         Form {
-            Text("Settings").font(.system(size: 40)).bold()
+            Text("Profile").font(.system(size: 30)).bold()
+            
+            Section(header: Text("User-Data")) {
+                if let user = logInViewModel.user {
+                    Text("Username: \(user.username)")
+                    Text("Email: \(user.email)")
+                } else {
+                    Text("No user data available.")
+                        .foregroundColor(.gray)
+                }
+            }
             
             Section(header: Text("App-Settings")) {
                 Toggle("Dark Mode", isOn: $darkMode)
@@ -26,6 +36,20 @@ struct SettingsView: View {
                     ForEach(language, id: \.self) { language in
                         Text(language)
                     }
+                }
+                .onChange(of: appLanguage) {
+                    if appLanguage == "German" || appLanguage == "French" {
+                        showLanguageAlert = true
+                    }
+                }
+                .alert(isPresented: $showLanguageAlert) {
+                    Alert(
+                        title: Text("Translations Not Ready"),
+                        message: Text("Translations in other languages have not been completed yet."),
+                        dismissButton: .default(Text("OK"), action: {
+                            appLanguage = "English"
+                        })
+                    )
                 }
                 
                 Button("Logout") {
@@ -45,7 +69,12 @@ struct SettingsView: View {
             }
         }
         .scrollContentBackground(.hidden)
+        .background {
+            Image("LogIn1")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+        }
         .preferredColorScheme(darkMode ? .dark : .light)
     }
 }
-

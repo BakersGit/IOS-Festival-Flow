@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct AddNewListSheet: View {
-    
     @Binding var isPresented: Bool
     @State private var title: String = ""
     @State private var newItemName: String = ""
@@ -24,7 +23,6 @@ struct AddNewListSheet: View {
                             isTitleFieldFocused = true
                         }
                 }
-                .frame(maxHeight: 100)
                 
                 Section(header: Text("Add Items")) {
                     TextField("Item name", text: $newItemName)
@@ -36,20 +34,33 @@ struct AddNewListSheet: View {
                         }
                     }
                     
+                    
                     HStack {
                         Spacer()
                         Button(action: {
-                            viewModel.addItem(name: newItemName, quantity: newItemQuantity, category: selectedCategory)
+                            viewModel.addItem(
+                                name: newItemName,
+                                quantity: newItemQuantity,
+                                category: selectedCategory
+                            )
                             newItemName = ""
                             newItemQuantity = ""
                             selectedCategory = .others
                         }) {
-                            Image(systemName: "plus")
-                                .frame(maxWidth: 50)
-                                .padding(10)
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
+                            Text("Add Item")
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: 180)
+                                .padding(.vertical, 12)
+                                .background(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [.green, .purple]),
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    ),
+                                    in: Capsule()
+                                )
                         }
                         .disabled(newItemName.isEmpty || newItemQuantity.isEmpty)
                         Spacer()
@@ -73,37 +84,45 @@ struct AddNewListSheet: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
             
             HStack {
                 Button(action: {
-                    viewModel.currentItems.removeAll() 
+                    viewModel.currentItems.removeAll()
                     isPresented = false
                 }) {
                     Text("Cancel")
-                        .frame(maxWidth: 100)
-                        .padding(10)
-                        .background(Color.red)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: 180)
+                        .padding(.vertical, 12)
+                        .background(.red.gradient, in: Capsule())
                 }
-                
+
                 Button(action: {
                     viewModel.createChecklist(title: title, items: viewModel.currentItems)
                     isPresented = false
                 }) {
                     Text("Save List")
-                        .frame(maxWidth: 100)
-                        .padding(10)
-                        .background(Color.purple)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: 180)
+                        .padding(.vertical, 12)
+                        .background(.purple.gradient, in: Capsule())
                 }
                 .disabled(title.isEmpty || viewModel.currentItems.isEmpty)
             }
             .padding(.horizontal)
             .padding(.bottom, 20)
         }
-        .background(Color(UIColor.systemBackground))
+        .background(
+            Image("Duration2")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+        )
         .cornerRadius(20)
         .shadow(radius: 10)
     }

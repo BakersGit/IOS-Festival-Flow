@@ -1,8 +1,29 @@
 
-/*
- import Foundation
+import Foundation
 
-struct DanceEvent: Codable {
+
+
+struct GoabaseEventList: Codable {
+    let context: String?
+    let type: String?
+    let name: String
+    let numberOfItems: Int
+    let itemListElement: [ListItem]
+}
+
+struct ListItem: Codable {
+    let type: String
+    let position: Int
+    let url: String
+
+    enum CodingKeys: String, CodingKey {
+        case type = "@type"
+        case position
+        case url
+    }
+}
+
+struct Festival: Identifiable, Codable {
     let context: String
     let type: String
     let id: String
@@ -15,9 +36,9 @@ struct DanceEvent: Codable {
     let performers: String
     let url: String
     let sameAs: [String]
-    let image: EventImage
+    let image: ImageObject
     let offers: Offer
-    let location: EventLocation
+    let location: Location
     let organizer: Organizer
 
     enum CodingKeys: String, CodingKey {
@@ -40,7 +61,7 @@ struct DanceEvent: Codable {
     }
 }
 
-struct EventImage: Codable {
+struct ImageObject: Codable {
     let type: String
     let thumbnailUrl: String
     let url: String
@@ -74,12 +95,12 @@ struct Offer: Codable {
     }
 }
 
-struct EventLocation: Codable {
+struct Location: Codable {
     let type: String
-    let name: String
-    let address: PostalAddress
+    let name: String?
+    let address: Address
     let geo: GeoCoordinates
-    let hasMap: MapLink
+    let hasMap: Map
 
     enum CodingKeys: String, CodingKey {
         case type = "@type"
@@ -90,19 +111,17 @@ struct EventLocation: Codable {
     }
 }
 
-struct PostalAddress: Codable {
+struct Address: Codable {
     let type: String
     let addressCountry: String
     let streetAddress: String
     let addressLocality: String
-    let postalCode: String
 
     enum CodingKeys: String, CodingKey {
         case type = "@type"
         case addressCountry
         case streetAddress
         case addressLocality
-        case postalCode
     }
 }
 
@@ -118,7 +137,7 @@ struct GeoCoordinates: Codable {
     }
 }
 
-struct MapLink: Codable {
+struct Map: Codable {
     let type: String
     let url: String
 
@@ -141,4 +160,3 @@ struct Organizer: Codable {
         case url
     }
 }
-*/

@@ -1,3 +1,4 @@
+
 import Foundation
 import Firebase
 import FirebaseAuth
@@ -6,12 +7,14 @@ import FirebaseFirestore
 @MainActor
 class MainViewModel: ObservableObject {
     
+    @Published var goabaseEvents: [Festival] = []
     @Published var events: [Event] = []
     @Published var favoriteEvents: [Event] = []
     @Published var searchQuery: String = ""
     @Published var errorMessage: String? = nil
     @Published var isLoading: Bool = false
     
+    private let goabaseEventRepository = GoaBaseEventRepository()
     private let eventsRepository = EventRepository()
     private let firestore = Firestore.firestore()
     private let auth = Auth.auth()
@@ -37,6 +40,22 @@ class MainViewModel: ObservableObject {
             isLoading = false
         }
     }
+    
+    func fetchGoabaseEvents() {
+        isLoading = true
+        errorMessage = nil
+        Task {
+            do {
+                goabaseEvents = try await goabaseEventRepository.getEventsFromAPI()
+            } catch let error as HTTPError {
+                errorMessage = error.message
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+            isLoading = false
+        }
+    }
+    
     
     func toggleFavorite(for event: Event) {
         guard let userId = auth.currentUser?.uid else { return }
@@ -66,17 +85,20 @@ class MainViewModel: ObservableObject {
     }
     
     private func loadUserFavorites() async {
-           guard let userId = auth.currentUser?.uid else {
-               errorMessage = "User not logged in. Please sign in."
-               return
-           }
-           do {
-               let document = try await firestore.collection("users").document(userId).getDocument()
-               let user = try document.data(as: FirestoreUser.self)
-               let favoriteEventIds = user.favoriteEvents
-               favoriteEvents = events.filter { favoriteEventIds.contains($0.id) }
-           } catch {
-               errorMessage = "Failed to load favorite events. Please try again."
-           }
-       }
+        guard let userId = auth.currentUser?.uid else {
+            errorMessage = "User not logged in. Please sign in."
+            return
+        }
+        do {
+            let document = try await firestore.collection("users").document(userId).getDocument()
+            let user = try document.data(as: FirestoreUser.self)
+            let favoriteEventIds = user.favoriteEvents
+            favoriteEvents = events.filter { favoriteEventIds.contains($0.id) }
+        } catch {
+            errorMessage = "Failed to load favorite events. Please try again."
+        }
+    }
 }
+
+
+

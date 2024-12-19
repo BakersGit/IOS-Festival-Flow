@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct EventCardView: View {
-    let event: Event
+struct GoaBaseEventCardView: View {
+    let event: Festival
     @ObservedObject var viewModel: MainViewModel
     @State private var showDetails: Bool = false
     
@@ -12,12 +12,16 @@ struct EventCardView: View {
                 .padding(.bottom, 2)
                 .frame(maxWidth: .infinity, alignment: .center)
             
-            Text("Date: \(event.dates.start.localDate)")
+            Text("Start Date: \(formattedDate(from: event.startDate))")
                 .font(.subheadline)
                 .frame(maxWidth: .infinity, alignment: .center)
             
-            if let firstImageURL = event.images.first?.url {
-                AsyncImage(url: URL(string: firstImageURL)) { image in
+            Text("End Date: \(formattedDate(from: event.endDate))")
+                .font(.subheadline)
+                .frame(maxWidth: .infinity, alignment: .center)
+            
+            if let imageUrl = URL(string: event.image.url) {
+                AsyncImage(url: imageUrl) { image in
                     image
                         .resizable()
                         .scaledToFit()
@@ -29,6 +33,7 @@ struct EventCardView: View {
                 }
                 .padding(.vertical, 8)
             }
+            
             Button(action: {
                 withAnimation {
                     showDetails.toggle()
@@ -44,47 +49,44 @@ struct EventCardView: View {
             
             if showDetails {
                 VStack(spacing: 8) {
-                    Text("Name: \(event.name)")
+                    Text("Description: \(event.description)")
                         .font(.body)
-                    Text("Date: \(event.dates.start.localDate)")
-                        .font(.body)
-                    if let localTime = event.dates.start.localTime {
-                        Text("Time: \(localTime)")
-                    }
-                    if let eventDescription = event.description {
-                        Text(eventDescription)
-                            .font(.body)
-                            .padding(.top, 10)
-                    } else {
-                        Text("Description: Not available.")
-                            .font(.body)
-                            .padding(.top, 10)
-                            .foregroundColor(.gray)
-                        Text("Check the Ticket-Link below for more Informations.")
-                            .font(.body)
-                        .foregroundColor(.black)                    }
+                        .padding(.bottom, 8)
                     
+                    if let locationName = event.location.name {
+                        Text("Location: \(locationName)")
+                            .font(.body)
+                    }
+                    Text("Country: \(event.location.address.addressCountry)")
+                        .font(.body)
+                    
+                    if let url = URL(string: event.url) {
+                        Button(action: {
+                            UIApplication.shared.open(url)
+                        }) {
+                            Text("More Informations")
+                                .font(.subheadline)
+                                .frame(maxWidth: .infinity, minHeight: 30)
+                                .background(Color.white)
+                                .foregroundStyle(.purple)
+                                .cornerRadius(5)
+                        }
+                    }
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.5)))
-                
-                Button(action: {
-                    if let url = URL(string: event.url) {
-                        UIApplication.shared.open(url)
-                    }
-                }) {
-                    Text("More Informations")
-                        .font(.subheadline)
-                        .frame(maxWidth: .infinity, minHeight: 30)
-                        .background(Color.white)
-                        .foregroundStyle(.purple)
-                        .cornerRadius(5)
-                }
             }
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.5)))
     }
+    
+    private func formattedDate(from isoDate: String) -> String {
+        let formatter = ISO8601DateFormatter()
+        guard let date = formatter.date(from: isoDate) else { return isoDate }
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateStyle = .medium
+        return outputFormatter.string(from: date)
+    }
 }
-

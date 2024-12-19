@@ -1,4 +1,7 @@
-
+/*
+ 
+// Für zukünfitges Feature benötigt.
+ 
 import SwiftUI
 import MapKit
 
@@ -20,3 +23,4 @@ struct JourneyView: View {
 #Preview {
     JourneyView()
 }
+*/

@@ -2,16 +2,16 @@
  
  Alter Code
  
-import SwiftUI
+ import SwiftUI
 
-struct EventScrollView: View {
+struct GoaBaseEventScrollView: View {
     @ObservedObject var viewModel: MainViewModel
 
     var body: some View {
         ScrollView(.horizontal) {
             HStack {
-                ForEach(viewModel.events, id: \.id) { event in
-                    EventCardView(event: event, viewModel: viewModel)
+                ForEach(viewModel.goabaseEvents, id: \.id) { event in
+                    GoaBaseEventCardView(event: event, viewModel: viewModel)
                         .frame(width: 250)
                 }
             }
