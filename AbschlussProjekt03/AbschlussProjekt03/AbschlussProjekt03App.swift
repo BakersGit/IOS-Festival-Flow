@@ -4,6 +4,8 @@ import FirebaseCore
 import Firebase
 import FirebaseAuth
 
+// Pitch-Account  User: Bakers@Pitch.de  PW: asdfasdf
+
 @main
 struct AbschlussProjekt03App: App {
     

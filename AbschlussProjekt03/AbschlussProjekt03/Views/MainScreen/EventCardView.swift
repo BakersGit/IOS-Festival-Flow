@@ -84,7 +84,7 @@ struct EventCardView: View {
             }
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.5)))
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color.black.opacity(0.6)))
     }
 }
 

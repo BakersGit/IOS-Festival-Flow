@@ -75,13 +75,13 @@ struct GoaBaseEventCardView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.5)))
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color.black.opacity(0.4)))
             }
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.5)))
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color.black.opacity(0.6)))
     }
-    
+    // auslagern
     private func formattedDate(from isoDate: String) -> String {
         let formatter = ISO8601DateFormatter()
         guard let date = formatter.date(from: isoDate) else { return isoDate }

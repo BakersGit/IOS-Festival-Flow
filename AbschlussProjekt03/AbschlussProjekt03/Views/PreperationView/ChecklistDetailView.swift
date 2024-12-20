@@ -67,9 +67,10 @@ struct ChecklistDetailView: View {
                         .bold()
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.black.opacity(0.6))
-                                .frame(width: 95, height: 45)
+                                .fill(Color.black.opacity(0.2))
+                                .frame(width: 95, height: 40)
                         )
+                        .padding(8)
                 }
                 .alert(isPresented: $showDeleteAlert) {
                     Alert(
@@ -97,7 +98,7 @@ struct ChecklistDetailView: View {
                         .padding(8)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.black.opacity(0.6))
+                                .fill(Color.black.opacity(0.2))
                                 .frame(width: 45, height: 45)
                         )
                 }

@@ -4,7 +4,7 @@ import SwiftUI
 
 
 // Erstellt mittels Tutorial - Nicht komplett selbst erarbeitet
-
+// Funktionen noch auslagern gemäß mvvm
 
 struct SplashView: View {
     
@@ -62,12 +62,12 @@ struct SplashView: View {
                     Button {
                         updateItem(isForward: true)
                     } label: {
-                        Text(selectedItems.id == introItems.last?.id ? "Continue" : "Next")
+                        Text(selectedItems.id == introItems.last?.id ? "Back" : "Next")
                             .fontWeight(.semibold)
                             .foregroundStyle(.white)
                             .frame(width: 250)
                             .padding(.vertical, 12)
-                            .background(.purple.gradient, in: .capsule)
+                            .background(.blue.gradient, in: .capsule)
                     }
                     .padding(.top, 25)
                     
@@ -80,7 +80,7 @@ struct SplashView: View {
                                 .foregroundStyle(.white)
                                 .frame(width: 250)
                                 .padding(.vertical, 12)
-                                .background(.blue.gradient, in: .capsule)
+                                .background(.purple.gradient, in: .capsule)
                         }
                         .padding(.top, 15)
                     }

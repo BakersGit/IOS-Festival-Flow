@@ -1,4 +1,4 @@
-
+// Künftiges Feature
 import SwiftUI
 
 struct FavoriteListView: View {
