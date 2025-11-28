@@ -10,7 +10,7 @@ Sie bezieht jeden ein der Freude am Verreisen oder Teilnehmen von mehrtätigen E
 ## Design
 
 <p>
-<img src="./img/Titel.png" width="400">
+<img src="./img/1.png" width="400">
   
 https://github.com/user-attachments/assets/f86ed26e-ead7-4a5a-9a4d-76b6931f241b
 
