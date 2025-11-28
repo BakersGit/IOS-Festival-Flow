@@ -1,7 +1,7 @@
 # Festival Flow
 
 
-#### “Your Festival, Your Adventure, YOur Flow!”
+#### “Your Festival, Your Adventure, Your Flow!”
 
 FestialFlow ist eine Festival/Event Organisations und Guide-App
 Sie bezieht jeden ein der Freude am Verreisen oder Teilnehmen von mehrtätigen Events hat.
@@ -11,6 +11,8 @@ Sie bezieht jeden ein der Freude am Verreisen oder Teilnehmen von mehrtätigen E
 
 <p>
 <img src="./img/1.jpg" width="400">
+<img src="./img/4.jpg" width="400">
+<img src="./img/6.jpg" width="400">
   
 https://github.com/user-attachments/assets/f86ed26e-ead7-4a5a-9a4d-76b6931f241b
 
