@@ -11,8 +11,6 @@ Sie bezieht jeden ein der Freude am Verreisen oder Teilnehmen von mehrtätigen E
 
 <p>
 <img src="./img/1.jpg" width="400">
-<img src="./img/4.jpg" width="400">
-<img src="./img/6.jpg" width="400">
   
 https://github.com/user-attachments/assets/f86ed26e-ead7-4a5a-9a4d-76b6931f241b
 
@@ -20,6 +18,8 @@ https://github.com/user-attachments/assets/f86ed26e-ead7-4a5a-9a4d-76b6931f241b
 
 
 ## Features
+
+<img src="./img/4.jpg" width="400">
 
 - [x] Event LiveTracker (Ticketmaster + GoaBase)
 - [x] Erstellen von Listen ( Wie z.B. Ausrüstung, Dokumente, etc..)
@@ -46,6 +46,8 @@ Firestore + Swift Data
 
 
 ## Ausblick
+
+<img src="./img/6.jpg" width="400">
 
 - [ ] Gefahren-Warnungen
 - [ ] Map-Tracking
