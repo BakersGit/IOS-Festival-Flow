@@ -22,7 +22,7 @@ https://github.com/user-attachments/assets/f86ed26e-ead7-4a5a-9a4d-76b6931f241b
 ## Die Idee
 
 <p>
-<img src="./img/3.1.jpg" width="1000">
+<img src="./img/3.1.JPG" width="1000">
   
 </p>
 
