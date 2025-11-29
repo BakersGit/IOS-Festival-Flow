@@ -11,9 +11,19 @@ Sie bezieht jeden ein der Freude am Verreisen oder Teilnehmen von mehrtätigen E
 
 <p>
 <img src="./img/1.jpg" width="1000">
-  
+
+
+Erster "Rohling" - Erste Design Ideen 
+
 https://github.com/user-attachments/assets/f86ed26e-ead7-4a5a-9a4d-76b6931f241b
 
+</p>
+
+## Die Idee
+
+<p>
+<img src="./img/3.1.jpg" width="1000">
+  
 </p>
 
 
@@ -57,3 +67,5 @@ Firestore + Swift Data
 - [ ] Noch dynamischere Listenvorschläge basierend auf Wetterprognosen
 - [ ] Camping-Tipps für Anfänger
 - [ ] ...
+
+<img src="./img/7.jpg" width="1000">
