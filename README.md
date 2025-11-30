@@ -3,7 +3,7 @@
 
 #### “Your Festival, Your Adventure, Your Flow!”
 
-FestialFlow ist eine Festival/Event Organisations und Guide-App
+Festial Flow ist eine Festival/Event Organisations und Guide-App. 
 Sie bezieht jeden ein der Freude am Verreisen oder Teilnehmen von mehrtätigen Events hat.
 
 
